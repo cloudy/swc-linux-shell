@@ -1,7 +1,9 @@
 Software Carpentry Workshop Fall 2018: Lesson2: Linux shell
 ===
 SWC workshop, September 2018
+
 Instructors: Adnan and Joe
+
 Time: 3 hours
 
 ## Linux environment
@@ -68,6 +70,7 @@ Let's talk about what that output means.
 
 
 Now, `pwd` command tells me where I am, but what is inside my working directory?
+
 With GUI, all files are visible to you when you open a folder, but how do you see the files and/or folders in CLI?
 
 ```shell=
@@ -144,6 +147,7 @@ $ pwd
 ```
 
 **Relative vs Absolute Paths**
+
 Navigation with cd .. is an example of the relative path - you indicate where you want to go relative to the location you are currently in. When you give an absolute path to the folder or file, you will end up there no matter what your current location within file system is.
 
 ```shell=
@@ -163,6 +167,7 @@ $ cd - #takes you BACK one directory, NOT UP!!!
 ```
 
 #### Challenge 2
+
 Make a diagram of our directory structure (~/Desktop/SWC\_fall2018/Data/) and practice navigation commands.
 
 a) Find out where you currently are
@@ -174,6 +179,7 @@ f) Get comfortable navigating across file system
 ####
 
 ### 2b. Bash: make new files and directories
+
 Now that you know how to navigate your file system and list files that are already there, let’s see how we can create new folders and files.
 You can create,delete,move,copy,rename files and directories using linux commands.
 
@@ -286,6 +292,7 @@ Instructor: Joe 1.5 h
             
 
 ### Lesson overview
+
 #### Learning objectives:
 
 - linux tools to manipulate text files
@@ -293,6 +300,7 @@ Instructor: Joe 1.5 h
 - working with multiple files
 
 ### 2c. Bash: manipulate text files
+
 Here is the list of the commands we will use in this second half of the lesson.
 
 ```shell=
@@ -306,6 +314,7 @@ $ grep       #select rows based on content
 ```
 
 Open `gapminder.txt` in your text editor first. Let’s understand this dataset.
+
 You want to be able to get a feel for datasets like that usung command line interface. Some questions you might want to ask:
 
 - How big is this file?
@@ -351,6 +360,7 @@ $ wc -l CountryList_uniq.txt > CountryCount_gapminder.txt
 Notice, we created 3 output files to find out how many countries are included into our dataset… Run `ls` to see for yoursef. Do we really need them? One way to avoid generating intermediate files you do not need is to string different commands together. This is known as ‘piping’
 
 **Pipes**
+
 Now let’s see how we can combine commands.
 ```shell=
 # use `|` symbol to pass the output of one command as an input to the next command
@@ -364,9 +374,11 @@ Now it is your turn…
 
 
 **CHALLANGE 4**
+
 What country had the highest "LifeExp" in 2012? 
 
 Use `gapminder.txt` as an input file and generate `Country_HighestLifeExp.txt` as your ONLY output file.
+
 Hint: you can accomplish this by using `grep`, `cut`, `sort` and `tail` but you might want to look up help pages for some of these commands...
 
 **Solution:** first step by step and then as a pipe
@@ -388,6 +400,7 @@ cut -f1,3,4 Data/gapminder.txt | grep 2002 | sort -n -k3 | tail -n 1 > CountryHi
 ```
 
 ### 2d. Bash: write shell scripts
+
 But what if you want to reuse these commands? You want to do something similar on another file? We need to save the commands to a file so we can easily reuse/modify them later. Such collection of commands in the order you want them to be executed is a simple shell script.
 
 Copy and paste or just redirect the command that works (from the terminal) to `MyFirstScript.sh` file
@@ -402,7 +415,9 @@ We have just created `MyFirstScript.sh`. Let’s view and modify it slightly: `n
 - Add usage statement: `#usage: script.sh`
 
 Let’s run it. But first look at it carefully, do you think it will run?
+
 `#./ indicates that you are running script from working directory
+
 ./MyFirstScript.sh`
 
 Well, it runs and generates the expected output. But is it a good script? Could you reuse it with a different file as input file? How can we make it more flexible?
@@ -410,6 +425,7 @@ Well, it runs and generates the expected output. But is it a good script? Could 
 To make it flexible we need to inroduce a variable for a part of the code that we want to change frequently. For example, if we want to run this code with a different file, we want a variable instead of hard-wired filename; a variable can take any user-defined value.
 
 **Variables in bash**
+
 Varible name: myName; value assigned to it: Your Name
 ```shell=
 #try this
@@ -455,9 +471,11 @@ Run it: `sh MyFirstScript_3.sh gapminder.txt`
 Is it better? Why? Can we make it even better? How?
 
 **CHALLANGE 5**
+
 Work in groups to write a script (name it `MyFirstScript_Good.sh`) that would allow user to compare any indices between the countries (not just lifeExp), use data for any year (not just 2002) and write the output to a user-defined output file.
 
 **Solution:**
+
 Here is `MyFirstScript_Good.sh`
 ```shell=
 #!/bin/bash
@@ -474,9 +492,11 @@ cut -f1,3,$columns $input | grep $year | sort -n -k3 | tail -n 1 > $out
 
 ```
 Run it: `sh MyFirstScript_Good.sh gapminder 5 1982 LargestPop1982.txt`
+
 This is much better!
 
 **Working with multiple files**
+
 Now let's see how we can use loops to run the same command on multiple files.
 
 ```shell=
