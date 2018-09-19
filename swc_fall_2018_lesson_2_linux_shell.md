@@ -375,7 +375,7 @@ Now it is your turn…
 
 **CHALLANGE 4**
 
-What country had the highest "LifeExp" in 2012? 
+What country had the highest "LifeExp" in 2002? 
 
 Use `gapminder.txt` as an input file and generate `Country_HighestLifeExp.txt` as your ONLY output file.
 
@@ -386,7 +386,7 @@ Hint: you can accomplish this by using `grep`, `cut`, `sort` and `tail` but you 
 # 1. select all columns of interest - "Country", "Year", and "lifeExp.
 cut -f1,3,4 Data/gapminder.txt > LifeExp_All.txt
 
-#2. get data for 2012 only
+#2. get data for 2002 only
 grep 2002 LifeExp_All.txt > LifeExp_2002.txt
 
 #3. sort by 3rd column from min to max
@@ -440,7 +440,7 @@ Here is `MyFirstScript_2.sh`
 ```shell=
 #!/bin/bash
 
-#record a country with highest Infant_mortality among countries in OECD_Countries_Full.txt
+#record a country with highest LifeExp among countries in OECD_Countries_Full.txt
 #usage: script.sh
 
 input=Data/gapminder.txt
@@ -458,7 +458,7 @@ Here is `MyFirstScript_3.sh`
 ```shell=
 #!/bin/bash
 
-#record a country with highest Infant_mortality among countries in OECD_Countries_Full.txt
+#record a country with highest LifeExp among countries in OECD_Countries_Full.txt
 #usage: script.sh $inputFile   #notice how we need to run this now
 
 input=$1  #special variable that stores the the first argument from the command line
@@ -509,10 +509,27 @@ $ for filename in MyFirstScript_2.sh MyFirstScript_3.sh; do cat $filename; done
 
 # We can generalize this to:
 $ for filename in MyFirstScript_*.sh; do cat $filename; done
-
-# We can use this on the data files for each country that we created earlier:
-$ for file in Data/ByCountry/*; do MyFirstScript_Good.sh ; done
 ```
+**CHALLANGE 6**
+Write a script to select a year with the highest life expectancy for one file in `Data/ByCountry` and then use `for loop` to run script for each file and record output to a single file.
+This is GetYearHighestLifeExp.sh
+```
+#!/bin/bash
+
+#record a year with highest Life Expectancy from every file in Data/ByCountry files and write results to a single file
+
+#usage: script.sh $inputFile  $outFile  
+
+input=$1              
+out=$2
+
+sort -n -k4 $input|tail -n 1|cut -f1,3,4 >> $out
+```
+To run: 
+```
+for file in Data/ByCountry/*; do ./GetYearHighestLifeExp.sh $file Results.txt; done
+```
+
 
 You have seen how we can run shell scripts from the command line. But remember that the shell is the environment for running any scripts/programs. We can just as easily run R script we wrote this morning.
 
