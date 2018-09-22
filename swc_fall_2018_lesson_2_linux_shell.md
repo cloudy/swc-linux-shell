@@ -1,10 +1,10 @@
-Software Carpentry Workshop Fall 2018: Lesson2: Linux shell
-===
+# SWC_Fall2018_Lesson2_final
+
+Lesson2: Linux Shell
 SWC workshop, September 2018
-
 Instructors: Adnan and Joe
-
 Time: 3 hours
+
 
 ## Linux environment
 ### 1. Why learn Linux?
@@ -66,12 +66,14 @@ Let's talk about what that output means.
 **File system**: root, working, current, parent directories… 
 ![](https://i.imgur.com/6kKRSvQ.png)
 
-> [name=AnnaWilliford] write a paragraph describing the figure! Introduce Folder==directory
+Operating systems follow a hierarchial file system. In a hierarchical file system, the folders and files are displayed in groups, which allows the user to see only the files they’re interested in seeing. For example, in the picture the root directory contains folders Users Applications and Volumes. Each of these folders could have hundreds of their own files, but unless they are opened the files are not displayed.
+
+In GUI the user views the contents of each folder by double-clicking the folder.
+
+With command-line user interface , the  folders (also known as directories) are listed as text.
 
 
-Now, `pwd` command tells me where I am, but what is inside my working directory?
-
-With GUI, all files are visible to you when you open a folder, but how do you see the files and/or folders in CLI?
+Let's see how you would list the files inside directory using command-line interface:
 
 ```shell=
 #list files
@@ -83,7 +85,10 @@ $ ls -F
 
 -F (file type) — Adds a symbol to the end of each listing. These symbols include /, to indicate a directory; @, to indicate a symbolic link to another file; and *, to indicate an executable file
 # use man pages or --help to see what flags do what
-# spend some time here - example of general command documentation
+$ man ls
+#or
+$ ls --help
+# spend some time here - this is an example of general command documentation
 # 
 # Option -a (all) — Lists all files in the directory, including hidden files (.filename).
 $ ls -a
@@ -93,9 +98,7 @@ $ ls -a
 
 $ ls -l
 
-#Option -S (size) — Sorts files by their sizes
 
-$ ls -S
 # Do you have Desktop directory? You can list files present on Desktop: Try
 
 $ ls -F Desktop  #if you do not have `Desktop` directory, it will give you an error...
@@ -112,7 +115,7 @@ ls -F Desktop/SWC_fall2018/
 ```
 ####
 
-In the exercise above, you viewed files in `SWC_fall2018` directory while in home directory. But you can change the directory and move directly into SWC_fall2018 directory.
+In the exercise above, you viewed files in SWC_fall2018 directory while in home directory. But you can change the directory and move directly into SWC_fall2018 directory.
 
 ```shell=
 $ cd Desktop
@@ -147,7 +150,6 @@ $ pwd
 ```
 
 **Relative vs Absolute Paths**
-
 Navigation with cd .. is an example of the relative path - you indicate where you want to go relative to the location you are currently in. When you give an absolute path to the folder or file, you will end up there no matter what your current location within file system is.
 
 ```shell=
@@ -167,8 +169,7 @@ $ cd - #takes you BACK one directory, NOT UP!!!
 ```
 
 #### Challenge 2
-
-Make a diagram of our directory structure (~/Desktop/SWC\_fall2018/Data/) and practice navigation commands.
+Make a diagram of our directory structure (~/Desktop/SWC_fall2018/Data/) and practice navigation commands.
 
 a) Find out where you currently are
 b) Go to `Data` folder, what is there? 
@@ -179,7 +180,6 @@ f) Get comfortable navigating across file system
 ####
 
 ### 2b. Bash: make new files and directories
-
 Now that you know how to navigate your file system and list files that are already there, let’s see how we can create new folders and files.
 You can create,delete,move,copy,rename files and directories using linux commands.
 
@@ -284,9 +284,22 @@ rm -r Japan/
 
 Next we will work with files from the `Data` folder that you moved to `SWC_fall2018` folder in the beginning of this workshop. Please move `Data` folder to unix_shell folder. We will keep all the files for Linux lesson in the `unix_shell` folder from now on. Make sure you understand the directory structure of SWC_fall2018 before we continue.
 
+```shell=
+# Solution:
+cp -r Data unix-shell
+
+# SWC_fall2018 directory structure
+SWC_fall2028
+  -> Data/
+  -> R_intro/
+  -> unix_shell/
+        -> Data/
+
+```
+
 -------- coffee break ---------------
 
-## Linux Lesson 2
+## Linux part 2
 
 Instructor: Joe 1.5 h
             
@@ -314,6 +327,22 @@ $ grep       #select rows based on content
 ```
 
 Open `gapminder.txt` in your text editor first. Let’s understand this dataset.
+
+How will you do this?
+Start from SWC_fall2018 folder. Navigate to unix_shell folder:
+```shell=
+$ cd unix_shell
+
+# view folder contents:
+$ ls 
+
+#see the contents of gapminder.txt
+$ cat Data/gapminder.txt
+# or use `less` command to view file from the beginning
+$ less Data/gapminder.txt
+#click `enter` to see the next line of the file
+#click `q` to exit file view
+```
 
 You want to be able to get a feel for datasets like that usung command line interface. Some questions you might want to ask:
 
@@ -452,13 +481,13 @@ Run it: `sh MyFirstScript_2.sh`
 
 Is it better? A little bit… why? What would be even better? We want to provide filename at the command line and not have to change the script itself.
 
-#### Passing command line arguments to shell scripts
+#### Passing command-line arguments to shell scripts
 
 Here is `MyFirstScript_3.sh`
 ```shell=
 #!/bin/bash
 
-#record a country with highest LifeExp among countries in OECD_Countries_Full.txt
+#record a country with highest LifeExp among countries in gapminder.txt
 #usage: script.sh $inputFile   #notice how we need to run this now
 
 input=$1  #special variable that stores the the first argument from the command line
@@ -466,7 +495,7 @@ input=$1  #special variable that stores the the first argument from the command 
 cut -f1,3,4 $input | grep 2002 | sort -n -k3 | tail -n 1 > CountryHighestLifeExp_3.txt
 ```
 
-Run it: `sh MyFirstScript_3.sh gapminder.txt`
+Run it: `sh MyFirstScript_3.sh Data/gapminder.txt`
 
 Is it better? Why? Can we make it even better? How?
 
@@ -480,18 +509,18 @@ Here is `MyFirstScript_Good.sh`
 ```shell=
 #!/bin/bash
 
-#record a country with highest Infant_mortality among countries in OECD_Countries_Full.txt
 #usage: script.sh $inputFile $index $year $outFile   #notice how we need to run this now
 
 input=$1              #special variable that stores the the first argument from the command line
-columns=$2            # $2, $3, $3 store values from 2-4 command line arguments
+columns=$2            # $2, $3, $4 store values from 2-4 command line arguments
 year=$3
 out=$4
 
 cut -f1,3,$columns $input | grep $year | sort -n -k3 | tail -n 1 > $out
 
 ```
-Run it: `sh MyFirstScript_Good.sh gapminder 5 1982 LargestPop1982.txt`
+Now if we want to find out what country had largest population in 1982 we can run our script like this:
+Run it: `./MyFirstScript_Good.sh Data/gapminder.txt 5 1982 LargestPop1982.txt`
 
 This is much better!
 
@@ -509,9 +538,17 @@ $ for filename in MyFirstScript_2.sh MyFirstScript_3.sh; do cat $filename; done
 
 # We can generalize this to:
 $ for filename in MyFirstScript_*.sh; do cat $filename; done
+
+#Note: `*` is a wildcard - it matches 0 or more characters. In our example, MyFirstScript_*.sh will match MyFirstScript_2.sh and MyFirstScript_3.sh
 ```
 **CHALLANGE 6**
 Write a script to select a year with the highest life expectancy for one file in `Data/ByCountry` and then use `for loop` to run script for each file and record output to a single file.
+
+Notes: 1) First, look at one of the files in ByCountry folder. Other files have exactly same format, but each files contains information about a different country.
+2) To append output to file, use `>>` operator
+
+#### Solution:
+
 This is GetYearHighestLifeExp.sh
 ```
 #!/bin/bash
